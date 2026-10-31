@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Unbounded", "Manrope", ui-sans-serif, sans-serif;
+
+  --color-sand: #f5efe6;
+  --color-cream: #fbf8f3;
+  --color-mist: #e7dfd2;
+  --color-stone: #8a8378;
+  --color-ink: #16181d;
+  --color-ember: #e8572a;
+  --color-ember-dark: #c94319;
+  --color-moss: #23382c;
+  --color-sage: #c9d6c4;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-sand font-sans text-ink antialiased;
+  }
+  ::selection {
+    @apply bg-ember text-white;
+  }
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade-up {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

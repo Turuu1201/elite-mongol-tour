@@ -1,0 +1,12 @@
+{
+  "name": "travel-site",
+  "private": true,
+  "scripts": {
+    "setup": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently -n api,web -c yellow,cyan \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run typecheck --prefix server && npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
