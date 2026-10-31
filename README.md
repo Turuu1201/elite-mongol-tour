@@ -7,7 +7,7 @@
 | Frontend | Vite + React + TypeScript + Tailwind CSS | `client/` |
 | Backend | Node.js + Express + Zod | `server/` |
 | Өгөгдлийн сан | PostgreSQL (орон нутагт PGlite, production-д Neon) | `server/src/schema.ts` |
-| Байршуулах | Vercel | `client/vercel.json` |
+| Байршуулах | Netlify (вэб + API функц), Neon (өгөгдлийн сан) | `netlify.toml` |
 
 ## Компьютер дээр ажиллуулах
 
@@ -105,26 +105,30 @@ npm run dev       # API (4000) ба вэб (5173) хоёуланг асаана
 | POST | `/api/events` | Хандалтын үйлдэл бүртгэх (нийтийн) |
 | GET | `/api/admin/analytics?days=7\|30\|90` | Хяналтын самбарын өгөгдөл |
 
-## Vercel дээр байршуулах
+## Netlify дээр байршуулах
 
-Нэг GitHub репоноос **хоёр Vercel төсөл** үүсгэнэ.
+Нэг Netlify сайт: вэб (`client/dist`) + API (`netlify/functions/api.ts` → `server/src/app.ts`).
+Тохиргоо нь `netlify.toml`-д; `/api/*` хүсэлтүүд Express функц рүү очно.
 
-1. **Өгөгдлийн сан:** Vercel → Storage → **Neon (Postgres)** үүсгээд `DATABASE_URL` хаягийг хуулна.
-2. **API төсөл:** Root Directory = `server`. Environment Variables хэсэгт:
+1. **Өгөгдлийн сан:** [neon.com](https://neon.com)-д Free акаунт нээж, **AWS US East 2 (Ohio)** бүсэд төсөл үүсгэнэ
+   (Netlify Functions мөн тэнд ажилладаг). Connection string (pooled)-ийг хуулна.
+2. **Netlify сайт:** GitHub репог холбоно (Build command, publish dir-ийг `netlify.toml`-оос автоматаар уншина).
+3. **Environment variables** (Site configuration → Environment variables):
    - `DATABASE_URL`: Neon-ий холбоос
    - `ADMIN_PASSWORD`: хүчтэй нууц үг
    - `SESSION_SECRET`: 32-оос дээш тэмдэгттэй санамсаргүй мөр
    - `NOTIFY_EMAIL`, `SMTP_USER`, `SMTP_PASS`: захиалгын имэйлд (дээрх хэсгийг үз)
-   - `SITE_URL`: вэб төслийн хаяг (имэйл дэх «Удирдлага руу орох» холбоосонд)
-3. **Вэб төсөл:** Root Directory = `client`. `client/vercel.json` доторх
-   `YOUR-API-PROJECT.vercel.app`-ийг 2-р алхмын API хаягаар солино.
+   - `SITE_URL`: сайтын хаяг (имэйл дэх «Удирдлага руу орох» холбоосонд)
 
 Анхны хүсэлт ирэхэд хүснэгтүүд болон жишээ аяллууд автоматаар үүснэ.
+
+**Netlify Free хязгаар:** сард 300 кредит (production deploy бүр 15 кредит, 1 GB урсгал 20 кредит).
+Хэтэрвэл сайт дараагийн сар хүртэл зогсоно, тиймээс өөрчлөлтөө нэгтгэж цөөн deploy хийнэ.
 
 ## Дараагийн алхмууд
 
 - Unsplash-ийн жишээ зургийг өөрийн компанийн зургаар солих (`server/src/seed.ts`)
 - Холбоо барих мэдээллийг засах (`client/src/lib/catalog.ts` → `CONTACT`)
-- Зураг шууд байршуулах (одоогоор холбоосоор; Vercel Blob холбох)
+- Зураг шууд байршуулах (одоогоор холбоосоор; Netlify Blobs эсвэл Cloudinary холбох)
 - Захиалагчид баталгаажуулах имэйл илгээх
 - QPay зэрэг онлайн төлбөрийн холболт

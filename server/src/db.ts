@@ -23,9 +23,14 @@ async function connect(): Promise<Db> {
     };
   }
 
-  if (process.env.VERCEL) throw new Error("Vercel дээр DATABASE_URL тохируулах шаардлагатай");
+  // Serverless орчинд (Netlify/AWS Lambda) файлын систем түр зуурынх тул PGlite ашиглахгүй
+  if (process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    throw new Error("Production орчинд DATABASE_URL тохируулах шаардлагатай");
+  }
 
-  const { PGlite } = await import("@electric-sql/pglite");
+  // Хувьсагчаар импортолснооор Netlify-ийн bundler PGlite (WASM)-ийг функцэд оруулахгүй
+  const pgliteModule = "@electric-sql/pglite";
+  const { PGlite } = (await import(pgliteModule)) as typeof import("@electric-sql/pglite");
   const dir = resolve(process.env.PGLITE_DIR ?? "./.data/pg");
   mkdirSync(dir, { recursive: true });
   console.log(`DB: PGlite (${dir})`);

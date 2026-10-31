@@ -1,0 +1,24 @@
+# Netlify: вэб (client/dist) + API (netlify/functions/api → server/src/app.ts)
+[build]
+  command = "npm ci --prefix server && npm ci --prefix client && npm run build --prefix client"
+  publish = "client/dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"
+
+# API хүсэлтүүд Express рүү
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# React Router: бусад бүх зам index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

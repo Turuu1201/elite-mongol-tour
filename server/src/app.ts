@@ -456,5 +456,5 @@ app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ error: m.server });
 });
 
-// Vercel оролтын файлаар src/app.ts-ийг сонгодог тул default export шаардлагатай
+// Зарим serverless орчин (жишээ нь Vercel) default export хайдаг
 export default app;
